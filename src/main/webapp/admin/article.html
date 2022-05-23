@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Ajout d'un article</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="/js/article.js" defer></script>
+</head>
+<body>
+<div id="app">
+	<div class="articles-list">
+		<div class="article" v-for="article in articles">
+			Code : {{article.code}}<br>
+			Label : {{article.label}}<br>
+			Prix : {{article.prix}}
+		</div>
+		<div>
+			<button v-on:click="displayArticleForm = true">
+				Ajouter un article
+			</button>
+		</div>
+	</div>
+	<div class="article-add" v-if="displayArticleForm">
+		Code article<br>
+		<input v-model="article.code"><br><br>
+		
+		Libellé<br>
+		<input v-model="article.label"><br><br>
+		
+		Prix<br>
+		<input v-model="article.prix"><br><br>
+		
+		<button v-on:click="sendArticle()">Envoyer</button>
+	</div>
+</div>
+</body>
+</html>

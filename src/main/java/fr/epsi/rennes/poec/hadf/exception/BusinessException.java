@@ -7,6 +7,7 @@ public class BusinessException extends Exception {
 	
 	public BusinessException(String code) {
 		super("Error with code : " + code);
+		this.code = code;
 	}
 	
 	public String getCode() {
