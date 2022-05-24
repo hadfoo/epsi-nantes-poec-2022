@@ -62,33 +62,44 @@ public class ArticleDAO {
 	public Article getArticleByCode(String articleCode) {
 		String sql = String.format(
 				"select " +
-					"id, " +
-					"code, " +
-					"label,  " +
-					"ingredient.id as ingredientId," +
-					"ingredient.code as ingredientCode," +
-					"ingredient.label as ingredientLabel," +
-					"ingredient.prix as ingredientPrix" +
+					"article.id as articleId, " +
+					"article.code as articleCode, " +
+					"article.label as articleLabel,  " +
+					"ingredient.id as ingredientId, " +
+					"ingredient.code as ingredientCode, " +
+					"ingredient.label as ingredientLabel, " +
+					"ingredient.prix as ingredientPrix " +
 				"from article " +
-				"join article_ingredient " +
-					"on article_ingredient.article_id = article.id" +
-				"join ingredient " +
-					"on ingredient.id = article_ingredient.ingredient_id" +
-				"where code = '%s'" +
-				"group by article_ingredient.article_id", articleCode);
+				"left join article_ingredient " +
+					"on article_ingredient.article_id = article.id " +
+				"left join ingredient " +
+					"on ingredient.id = article_ingredient.ingredient_id " +
+				"where article.code = '%s'", articleCode);
 		try {
 			Connection conn = ds.getConnection();
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
-			if (rs.next()) {
-				Article article = new Article();
-				article.setId(rs.getInt("id"));
-				article.setCode(rs.getString("code"));
-				article.setLabel(rs.getString("label"));
-				
-				return article;
+			
+			Article article = null;
+			while (rs.next()) {
+				if (article == null) {
+					article = new Article();
+					article.setIngredients(new ArrayList<>());
+					article.setId(rs.getInt("articleId"));
+					article.setCode(rs.getString("articleCode"));
+					article.setLabel(rs.getString("articleLabel"));
+				}
+				String ingredientCode = rs.getString("ingredientCode");
+				if (ingredientCode != null) {
+					Ingredient ingredient = new Ingredient();
+					ingredient.setId(rs.getInt("ingredientId"));
+					ingredient.setCode(ingredientCode);
+					ingredient.setLabel(rs.getString("ingredientLabel"));
+					ingredient.setPrix(rs.getDouble("ingredientPrix"));
+					article.getIngredients().add(ingredient);
+				}
 			}
-			return null;
+			return article;
 		} catch (SQLException e) {
 			throw new TechnicalException(e);
 		}

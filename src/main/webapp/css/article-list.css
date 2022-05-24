@@ -1,0 +1,7 @@
+.article {
+	cursor: pointer;
+	margin: 10px;
+}
+.article:hover {
+	background-color: yellow;
+}
