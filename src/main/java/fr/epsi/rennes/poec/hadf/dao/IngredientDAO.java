@@ -43,5 +43,28 @@ public class IngredientDAO {
 			throw new TechnicalException(e);
 		}
 	}
+	
+	public Ingredient getIngredientById(int ingredientId) {
+		String sql = String.format(
+				"select * from ingredient where id = %s", ingredientId);
+		
+		try {
+			Connection conn = ds.getConnection();
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			if (rs.next()) {
+				Ingredient ingredient = new Ingredient();
+				ingredient.setId(rs.getInt("id"));
+				ingredient.setCode(rs.getString("code"));
+				ingredient.setLabel(rs.getString("label"));
+				ingredient.setPrix(rs.getDouble("prix"));
+				
+				return ingredient;
+			}
+			return null;
+		} catch (SQLException e) {
+			throw new TechnicalException(e);
+		}
+	}
 
 }

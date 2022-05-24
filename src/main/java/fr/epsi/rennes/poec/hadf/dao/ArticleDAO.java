@@ -105,6 +105,52 @@ public class ArticleDAO {
 		}
 	}
 	
+	public Article getArticleById(int articleId) {
+		String sql = String.format(
+				"select " +
+					"article.id as articleId, " +
+					"article.code as articleCode, " +
+					"article.label as articleLabel,  " +
+					"ingredient.id as ingredientId, " +
+					"ingredient.code as ingredientCode, " +
+					"ingredient.label as ingredientLabel, " +
+					"ingredient.prix as ingredientPrix " +
+				"from article " +
+				"left join article_ingredient " +
+					"on article_ingredient.article_id = article.id " +
+				"left join ingredient " +
+					"on ingredient.id = article_ingredient.ingredient_id " +
+				"where article.id = '%s'", articleId);
+		try {
+			Connection conn = ds.getConnection();
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			Article article = null;
+			while (rs.next()) {
+				if (article == null) {
+					article = new Article();
+					article.setIngredients(new ArrayList<>());
+					article.setId(rs.getInt("articleId"));
+					article.setCode(rs.getString("articleCode"));
+					article.setLabel(rs.getString("articleLabel"));
+				}
+				String ingredientCode = rs.getString("ingredientCode");
+				if (ingredientCode != null) {
+					Ingredient ingredient = new Ingredient();
+					ingredient.setId(rs.getInt("ingredientId"));
+					ingredient.setCode(ingredientCode);
+					ingredient.setLabel(rs.getString("ingredientLabel"));
+					ingredient.setPrix(rs.getDouble("ingredientPrix"));
+					article.getIngredients().add(ingredient);
+				}
+			}
+			return article;
+		} catch (SQLException e) {
+			throw new TechnicalException(e);
+		}
+	}
+	
 	public void addIngredientToArticle(int articleId, int ingredientId) {
 		String sql = String.format(
 				"insert into article_ingredient " +
@@ -115,6 +161,24 @@ public class ArticleDAO {
 			Connection conn = ds.getConnection();
 			Statement stmt = conn.createStatement();
 			stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			throw new TechnicalException(e);
+		}
+	}
+	
+	public void updatePrixArticle(int articleId, double prixArticle) {
+		String sql = String.format(
+				"update article set prix = %s where id = %s",
+				prixArticle, articleId);
+		
+		try {
+			Connection conn = ds.getConnection();
+			Statement stmt = conn.createStatement();
+			int nbUpdates = stmt.executeUpdate(sql);
+			if (nbUpdates == 0) {
+				throw new TechnicalException(
+						String.format("Article not found with id : %s", articleId));
+			}
 		} catch (SQLException e) {
 			throw new TechnicalException(e);
 		}

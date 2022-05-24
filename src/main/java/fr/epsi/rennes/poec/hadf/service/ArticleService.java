@@ -6,10 +6,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import fr.epsi.rennes.poec.hadf.conf.Constantes;
 import fr.epsi.rennes.poec.hadf.dao.ArticleDAO;
+import fr.epsi.rennes.poec.hadf.dao.IngredientDAO;
 import fr.epsi.rennes.poec.hadf.domain.Article;
+import fr.epsi.rennes.poec.hadf.domain.Ingredient;
 import fr.epsi.rennes.poec.hadf.exception.BusinessException;
 
 @Service
@@ -19,6 +22,9 @@ public class ArticleService {
 	
 	@Autowired
 	private ArticleDAO articleDAO;
+	
+	@Autowired
+	private IngredientDAO ingredientDAO;
 	
 	public List<Article> getArticles() {
 		return articleDAO.getArticles();
@@ -55,8 +61,15 @@ public class ArticleService {
 		return articleDAO.getArticleByCode(articleCode);
 	}
 	
+	@Transactional
 	public void addIngredientToArticle(int articleId, int ingredientId) {
 		articleDAO.addIngredientToArticle(articleId, ingredientId);
+		
+		Article article = articleDAO.getArticleById(articleId);
+		Ingredient ingredient = ingredientDAO.getIngredientById(ingredientId);
+		
+		double prix = article.getPrix() + ingredient.getPrix();
+		articleDAO.updatePrixArticle(articleId, prix);
 	}
 
 }

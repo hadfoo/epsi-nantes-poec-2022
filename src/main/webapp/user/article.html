@@ -23,8 +23,7 @@
 			<select v-model="ingredient">
 				<option></option>
 				<option v-for="ingredient in ingredients"
-					v-bind:value="ingredient">
-				</option>
+					v-bind:value="ingredient">{{ingredient.label}}</option>
 			</select>
 			<button v-on:click="ajouterIngredient()">Ajouter un ingrédient</button>
 		</div>

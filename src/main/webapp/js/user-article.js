@@ -40,7 +40,6 @@ var app = new Vue({
 				if (response.data.success) {
 					this.article.ingredients.push(this.ingredient);
 					this.ingredient = null;
-//					this.$forceUpdate();
 				}
 			})
 		}
