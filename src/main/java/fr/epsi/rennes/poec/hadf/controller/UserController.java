@@ -1,7 +1,5 @@
 package fr.epsi.rennes.poec.hadf.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,20 +7,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.epsi.rennes.poec.hadf.domain.Article;
-import fr.epsi.rennes.poec.hadf.domain.Ingredient;
 import fr.epsi.rennes.poec.hadf.domain.Response;
 import fr.epsi.rennes.poec.hadf.exception.BusinessException;
 import fr.epsi.rennes.poec.hadf.service.ArticleService;
-import fr.epsi.rennes.poec.hadf.service.IngredientService;
 
 @RestController
 public class UserController {
 	
 	@Autowired
 	private ArticleService articleService;
-	
-	@Autowired
-	private IngredientService ingredientService;
 	
 	// commentaire sur une seule ligne
 	/*
@@ -52,11 +45,6 @@ public class UserController {
 		articleService.addIngredientToArticle(article_id, ingredient_id);
 		
 		return new Response<>(true);
-	}
-	
-	@GetMapping("/user/ingredients")
-	public Response<List<Ingredient>> getIngredients() {
-		return new Response<>(ingredientService.getIngredients());
 	}
 
 }

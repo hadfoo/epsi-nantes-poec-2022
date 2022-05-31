@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import fr.epsi.rennes.poec.hadf.dao.IngredientDAO;
 import fr.epsi.rennes.poec.hadf.domain.Ingredient;
+import fr.epsi.rennes.poec.hadf.exception.BusinessException;
 
 @Service
 public class IngredientService {
@@ -16,6 +17,15 @@ public class IngredientService {
 	
 	public List<Ingredient> getIngredients() {
 		return ingredientDAO.getIngredients();
+	}
+	
+	public void addIngredient(Ingredient ingredient) throws BusinessException {
+		if (ingredient.getCode() == null
+				|| ingredient.getLabel() == null
+				|| ingredient.getPrix() == 0) {
+			throw new BusinessException("ingredient.add.mandatory.missing");
+		}
+		ingredientDAO.addIngredient(ingredient);
 	}
 
 }

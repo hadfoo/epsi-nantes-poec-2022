@@ -66,5 +66,20 @@ public class IngredientDAO {
 			throw new TechnicalException(e);
 		}
 	}
+	
+	public void addIngredient(Ingredient ingredient) {
+		String sql = String.format(
+				"insert into ingredient " +
+				"(code, label, prix) values ('%s', '%s', %s)",
+				ingredient.getCode(), ingredient.getLabel(), ingredient.getPrix());
+		
+		try {
+			Connection conn = ds.getConnection();
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			throw new TechnicalException(e);
+		}
+	}
 
 }

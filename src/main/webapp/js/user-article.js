@@ -24,7 +24,7 @@ var app = new Vue({
 			});
 		},
 		loadIngredients() {
-			axios.get('/user/ingredients')
+			axios.get('/public/ingredients')
 			.then(response => {
 				this.ingredients = response.data.data;
 			});

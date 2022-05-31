@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Ajout d'un article</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="/js/ingredient.js" defer></script>
+</head>
+<body>
+<div id="app">
+	<div class="ingredients-list">
+		<div class="ingredient" v-for="ingredient in ingredients">
+			Code : {{ingredient.code}}<br>
+			Label : {{ingredient.label}}<br>
+			Prix : {{ingredient.prix}}
+		</div>
+		<div>
+			<button v-on:click="displayIngredientForm = true">
+				Ajouter un ingredient
+			</button>
+		</div>
+	</div>
+	<div class="ingredient-add" v-if="displayIngredientForm">
+		Code ingrédient<br>
+		<input v-model="ingredient.code"><br><br>
+		
+		Libellé<br>
+		<input v-model="ingredient.label"><br><br>
+		
+		Prix<br>
+		<input v-model="ingredient.prix"><br><br>
+		
+		<button v-on:click="sendIngredient()">Envoyer</button>
+	</div>
+</div>
+</body>
+</html>

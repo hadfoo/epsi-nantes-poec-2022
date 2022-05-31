@@ -29,7 +29,23 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>fr.epsi.rennes.poec.hadf.ApplicationAtelier</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
         </plugins>
+        <resources>
+			<resource>
+				<directory>conf</directory>
+			</resource>
+		</resources>
     </build>
 
     <dependencies>
